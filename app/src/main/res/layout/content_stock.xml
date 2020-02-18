@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Stock"
+    tools:showIn="@layout/activity_stock">
+
+    <LinearLayout
+        android:id="@+id/screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLocHead"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="5dp"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTxtLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvChecker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvMat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/bun1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="จำนวน"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/b1"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bun2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="มัด มัดละ"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/p1"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bun3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PC เศษ"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/i1"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/asss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="จำนวน"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/b2"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/asd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="มัด มัดละ"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/p2"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bun6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PC เศษ"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/i2"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="จำนวน"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/b3"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="มัด มัดละ"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/p3"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PC เศษ"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/i3"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#D71B60"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="สวย" />
+
+                <EditText
+                    android:id="@+id/edtGood"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/chkRust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="71dp"
+                    android:text="แดง/สนิม" />
+
+                <EditText
+                    android:id="@+id/edtRust"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkClean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ทำความสะอาด" />
+
+                <EditText
+                    android:id="@+id/edtClean"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/chkPoor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="มัดหลวม" />
+
+                <EditText
+                    android:id="@+id/edtPoor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkEdge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ขอบข้างแหว่ง" />
+
+                <EditText
+                    android:id="@+id/edtEdge"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/chkShort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="สั้น/ยาว" />
+
+                <EditText
+                    android:id="@+id/edtShort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkCrooked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="บิด/งอ/บุบ/เบี้ยว" />
+
+                <EditText
+                    android:id="@+id/edtCrooked"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/chkOutStock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="หมดกอง" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkNotEqual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="หัว/ท้าย/กลาง ไม่เท่ากัน" />
+
+                <EditText
+                    android:id="@+id/edtNotEqual"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btndopen"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="68dp"
+                    android:layout_height="wrap_content"
+                    android:text="ทด"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkNotsquare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ขอบมน/ไม่เหลี่ยม/ไม่กลม"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edtNotsquare"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center"
+                    android:textColor="#051CAC"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#C5FFD1"
+                android:textAlignment="center"
+                android:textColor="#FF0000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnSave"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="บันทึก"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnClose"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ปิด(แก้ไม่ได้)"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <ProgressBar
+            android:id="@+id/pbbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+</RelativeLayout>

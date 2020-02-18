@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">นับSTOCK 2.7</string>
+    <string name="action_settings">นับSTOCK 2.7</string>
+    <string name="title_activity_login">นับSTOCK 2.7</string>
+    <string name="title_activity_line_data">นับSTOCK 2.7</string>
+    <string name="title_activity_stock">นับSTOCK 2.7</string>
+    <string name="title_activity_check_version">นับSTOCK 2.7</string>
+    <string name="title_activity_webview">นับSTOCK 2.7</string>
+</resources>
