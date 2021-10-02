@@ -33,47 +33,36 @@ import java.sql.ResultSet;
 public class CheckVersion extends AppCompatActivity {
 
     ProgressBar pbbar; ProgressDialog bar;
+    /*ConnectionClassDev connectionClass;*/
     ConnectionClass connectionClass;
     Version vers;
     String app_name,capp_ver,fapp_verion;
     TextView cur_app,last_app;
     Button btnUp;
+    String lurl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_version);
 
-
-        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-
-
-        //ip = "192.168.116.11";
-        if(ip.length()<8){
-            ip = "100";
-        }else{
-            ip = ip.substring(8,11);
-        }
-
-
-        if(ip==null || ip.equals("")){
-            ip = "100";
-        }else{
-            if(ip.equals("116")){
-                ip = "116";
-            }else{
-                ip = "100";
-            }
-
-        }
-
-        // Log.d("ip",ip);
-
-        vers = new Version();
         connectionClass = new ConnectionClass();
 
-        connectionClass.setIp(ip);
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        lurl = "http://report.zubbsteel.com/version/version.php?n=";
+        connectionClass.setUdbn("PP");
+        connectionClass.setUip("192.168.100.222");
+        connectionClass.setUpass("");
+
+        if(ip!= null && ip.substring(8,10).equals("81")){
+            connectionClass.setUdbn("PP");
+            connectionClass.setUip("199.0.0.100");
+            connectionClass.setUpass("itsteel1983");
+            lurl = "http://199.0.0.16/version/version.php?n=";
+        }
+
+        vers = new Version();
 
         pbbar = (ProgressBar) findViewById(R.id.pbbar);
         cur_app = (TextView) findViewById(R.id.cur_app);
@@ -235,7 +224,7 @@ public class CheckVersion extends AppCompatActivity {
 
             try {
 
-                URL url = new URL("http://report.zubbsteel.com/version/version.php?n="+app_name);
+                URL url = new URL(lurl+app_name);
 
                 HttpURLConnection c = (HttpURLConnection) url.openConnection();
                 c.setRequestMethod("GET");

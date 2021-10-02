@@ -106,7 +106,7 @@ public class LineData extends AppCompatActivity {
         {
             int keycode = KEvent.getKeyCode();
 
-            if(keycode == 120){
+            if(keycode == 120 || keycode == 520){
 
                 hideEdt.requestFocus();
 
@@ -177,7 +177,7 @@ public class LineData extends AppCompatActivity {
                     if(gloc.length()>=3){
                         locstmt =" Location ";
                     }
-                    if(connectionClass.getIp().equals("116")){
+                    if(connectionClass.getUip().equals("192.168.116.222")){
                         locstmt = " location ";
                     }
 
@@ -313,7 +313,7 @@ public class LineData extends AppCompatActivity {
                          iloc =" Location ";
                     }
 
-                    if(connectionClass.getIp().equals("116")){
+                    if(connectionClass.getUip().equals("192.168.116.222")){
                          iloc =" Location ";
                     }
 

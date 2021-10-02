@@ -6,7 +6,7 @@ package com.example.stockrecheck;
 
 public class Version {
 
-    public String Version = "2.7";
+    public String Version = "3.22";
     public String name = "zubbrestock";
 
     public String getAppName() {

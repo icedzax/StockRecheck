@@ -29,13 +29,13 @@ public class Stock extends AppCompatActivity {
     ProgressBar pbbar;
     UserHelper usrHelper ;
     ConnectionClass connectionClass;
-    String gbar,h_location2,h_location,h_col,h_mat,h_desc,h_con,h_b1,h_b2,h_b3,h_p1,h_p2,h_p3,h_i1,h_i2,h_i3,h_itxt1,h_itxt2,h_itxt3;
-    String h_remark,h_good,h_rust,h_clean,h_poor,h_edge,h_short,h_crook,h_note,h_notsq,h_0,h_seq;
+    String gloc,gbar,h_location2,h_location,h_col,h_mat,h_desc,h_con,h_b1,h_b2,h_b3,h_p1,h_p2,h_p3,h_i1,h_i2,h_i3,h_itxt1,h_itxt2,h_itxt3;
+    String h_offset,h_bar,gmat,gseq,gcdate,h_remark,h_good,h_rust,h_clean,h_poor,h_edge,h_short,h_crook,h_note,h_notsq,h_0,h_seq;
     TextView tv_remark,tvTxtLocation,tvCol,tvChecker,tvMat,tvDesc,tvLocHead,status;
-    CheckBox cgood,crust,cclean,cpoor,cedge,cshort,ccrook,cnote,cnotsq,c0;
-    EditText egood,erust,eclean,epoor,eedge,eshort,ecrook,enote,enotsq;
+    CheckBox cgood,crust,cclean,cpoor,cedge,cshort,ccrook,cnote,cnotsq,c0,coffset;
+    EditText egood,erust,eclean,epoor,eedge,eshort,ecrook,enote,enotsq,offset,remark;
     EditText b1,b2,b3,p1,p2,p3,i1,i2,i3;
-    Button saveBtn,closeBtn;
+    Button saveBtn,closeBtn,btnUnlock;
 
     Boolean outofstock = false;
 
@@ -61,13 +61,17 @@ public class Stock extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             gbar = "";
-
-
+            gseq = "";
+            gcdate = "";
+            gmat = "";
+            gloc = "";
 
         } else {
             gbar = extras.getString("bar");
-
-
+            gseq = extras.getString("seq");
+            gcdate = extras.getString("cdate");
+            gmat = extras.getString("mat");
+            gloc = extras.getString("loc");
         }
 
        // gbar = "6RR-027";
@@ -77,7 +81,7 @@ public class Stock extends AppCompatActivity {
         tvDesc = findViewById(R.id.tvDesc);
         tvMat = findViewById(R.id.tvMat);
         tvTxtLocation =findViewById(R.id.tvTxtLocation);
-        tvLocHead = findViewById(R.id.tvLocHead);
+//        tvLocHead = findViewById(R.id.tvLocHead);
         status = findViewById(R.id.status);
         tv_remark =findViewById(R.id.txt_remark);
 
@@ -101,6 +105,9 @@ public class Stock extends AppCompatActivity {
         ecrook = findViewById(R.id.edtCrooked);
         enote = findViewById(R.id.edtNotEqual);
         enotsq = findViewById(R.id.edtNotsquare);
+        offset = findViewById(R.id.edtOffset);
+        remark = findViewById(R.id.remark);
+        coffset = findViewById(R.id.chkOffset);
 
         b1 = findViewById(R.id.b1);
         b2 = findViewById(R.id.b2);
@@ -114,12 +121,17 @@ public class Stock extends AppCompatActivity {
 
         saveBtn = findViewById(R.id.btnSave);
         closeBtn = findViewById(R.id.btnClose);
+        btnUnlock = findViewById(R.id.btnClose2);
 
 
+        if(gbar==null){
+            FillList fillList = new FillList();
+            fillList.execute(gloc,gcdate,"c",gmat);
+        }else{
+            FillList fillList = new FillList();
+            fillList.execute(gbar,"","b","");
+        }
 
-
-        FillList fillList = new FillList();
-        fillList.execute(gbar);
 
 
         cgood.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +252,22 @@ public class Stock extends AppCompatActivity {
             }
         });
 
+        coffset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (((CheckBox) view).isChecked()) {
+                    offset.setEnabled(true);
+                    offset.requestFocus();
+                }
+                else{
+                    offset.setEnabled(false);
+                    offset.setText("");
+                }
+            }
+        });
+
+
+
         c0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -278,6 +306,7 @@ public class Stock extends AppCompatActivity {
                     cnotsq.setEnabled(false);
                     cpoor.setEnabled(false);
                     cshort.setEnabled(false);
+                    coffset.setEnabled(false);
 
                     erust.setText("");
                     eclean.setText("");
@@ -288,6 +317,7 @@ public class Stock extends AppCompatActivity {
                     enotsq.setText("");
                     epoor.setText("");
                     eshort.setText("");
+                    offset.setText("");
 
                     erust.setEnabled(false);
                     eclean.setEnabled(false);
@@ -298,6 +328,7 @@ public class Stock extends AppCompatActivity {
                     enotsq.setEnabled(false);
                     epoor.setEnabled(false);
                     eshort.setEnabled(false);
+                    offset.setEnabled(false);
 
                 }
                 else{
@@ -335,6 +366,7 @@ public class Stock extends AppCompatActivity {
                     cnotsq.setEnabled(true);
                     cpoor.setEnabled(true);
                     cshort.setEnabled(true);
+                    offset.setEnabled(true);
 
                 }
             }
@@ -347,6 +379,35 @@ public class Stock extends AppCompatActivity {
             public void onClick(View view) {
                 SaveOutPut sop = new SaveOutPut();
                 sop.execute(gbar,"");
+            }
+        });
+
+        btnUnlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            //    Toast.makeText(Stock.this,"CLOICK",Toast.LENGTH_SHORT).show();
+
+
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(Stock.this);
+                builder.setTitle("ปลดล็อค");
+                builder.setMessage("ยืนยันการปลดล็อค ?");
+                builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        unLock ulck = new unLock();
+                        ulck.execute();
+//                        onRestart();
+                    }
+                });
+                builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //dialog.dismiss();
+
+                    }
+                });
+                builder.show();
+
             }
         });
 
@@ -429,6 +490,7 @@ public class Stock extends AppCompatActivity {
         cnotsq.setEnabled(false);
         cpoor.setEnabled(false);
         cshort.setEnabled(false);
+        coffset.setEnabled(false);
 
 
     }
@@ -446,6 +508,21 @@ public class Stock extends AppCompatActivity {
         return edt.getText().toString();
     }
 
+    String getEDTre(EditText edt){
+        if(edt.getText().toString()==null || edt.getText().toString().equals("")){
+            return "NULL";
+        }
+        return "'"+edt.getText().toString()+"'";
+    }
+
+    Integer offSet(String offset){
+        if(offset==null || offset.equals("") || offset.equals("null")  || offset.equals("NULL") ){
+            return  0;
+        }else{
+            return Integer.valueOf(offset);
+        }
+    }
+
     String getEDTC(EditText edt){
         if(edt.getText().toString()==null || edt.getText().toString().equals("")){
             return "";
@@ -457,7 +534,7 @@ public class Stock extends AppCompatActivity {
     String getLocText(String param){
         String m = "";
         String r = "";
-        if(param!= null && param.length() > 3){
+        if(param!= null && param.length() >= 2){
 
         if(param.substring(2,3).equals("L")) {
             r = "ซ้าย";
@@ -465,12 +542,12 @@ public class Stock extends AppCompatActivity {
             r = "ขวา";
         }
 
-        if(param.substring(1,2).equals("F")) {
+      /*  if(param.substring(1,2).equals("F")) {
             m = " หน้า";
         }else if(param.substring(1,2).equals("R")){
             m = " หลัง";
-        }
-            return "ช่อง "+param.substring(0,1)+m+r;
+        }*/
+            return "ช่อง "+param.substring(0,1)+r;
       }else{
             return "";
         }
@@ -506,8 +583,8 @@ public class Stock extends AppCompatActivity {
             if(h_remark==null || h_remark.equals("")){
 
             }else{
-                tv_remark.setVisibility(View.VISIBLE);
-                tv_remark.setText(h_remark);
+//                remark.setVisibility(View.VISIBLE);
+                remark.setText(h_remark);
             }
 
 
@@ -547,26 +624,47 @@ public class Stock extends AppCompatActivity {
                 enotsq.setText(h_notsq);
                 cnotsq.setChecked(true);
             }
+            if(h_offset!=null  ){
+                if(h_offset==null || h_offset.equals("0")){
+                    offset.setText("");
+                    coffset.setChecked(false);
+                }else{
+                    offset.setText(h_offset);
+                    coffset.setChecked(true);
+                }
+
+            }
+            if(h_remark!=null){
+                remark.setText(h_remark);
+
+            }
+
             if(h_0!=null){
                 c0.setChecked(true);
             }
-
+//            tvChecker.setText(""+h_con);
 
             tvCol.setText("เสาที่ "+h_col);
             tvDesc.setText(h_desc);
             tvMat.setText(h_mat);
-            tvTxtLocation.setText(getLocText(h_location+""+h_seq));
-            tvLocHead.setText(h_location+"-"+h_seq);
+            tvTxtLocation.setText(h_location);
+//            tvLocHead.setText(h_location);
 
-            if(h_con==null || h_con.equals("")) {
-                saveBtn.setVisibility(View.VISIBLE);
-                closeBtn.setVisibility(View.VISIBLE);
-            }else{
-                saveBtn.setVisibility(View.GONE);
-                closeBtn.setVisibility(View.GONE);
-                lockScreen();
 
-            }
+
+                if(h_con==null || h_con.equals("")) {
+                    saveBtn.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.VISIBLE);
+                }else{
+                    saveBtn.setVisibility(View.GONE);
+                    closeBtn.setVisibility(View.GONE);
+                    lockScreen();
+
+                    if(usrHelper.getUserName().equals("Surasak.w") || usrHelper.getUserName().equals("Tanida.p") ){
+                        btnUnlock.setVisibility(View.VISIBLE);
+                    }
+
+                }
 
         }
 
@@ -580,23 +678,28 @@ public class Stock extends AppCompatActivity {
                     z = "Error in connection with SQL server";
                 } else {
 
+                    String query = "select *,left(Location,2) as Location2,format(SEQ,'000') as SEQF  from STOCK.dbo.tbl_physicalcount_location where barcode = '"+params[0]+"'  ";;
+
+                    if(params[2].equals("c")){
+                        query = "select *,left(Location,2) as Location2,format(SEQ,'000') as SEQF  from STOCK.dbo.tbl_physicalcount_location where Location = '"+params[0]+"' and countdate = '"+params[1]+"' and Material = '"+params[3]+"'  ";
+                    }
 
 
-                    String query = "select *,left(Location,2) as Location2,format(SEQ,'000') as SEQF  from tbl_physicalcount_location where barcode = '"+params[0]+"'  ";
-
-                    //Log.d("query",query);
+                    Log.d("query",query);
 
                     PreparedStatement ps = con.prepareStatement(query);
                     ResultSet rs = ps.executeQuery();
 
                     while (rs.next()) {
+                        h_offset = rs.getString("offset");
                         h_remark = rs.getString("Remark");
-                        h_col = rs.getString("bin");
+                        h_col = rs.getString("Bin");
                         h_desc = rs.getString("MatDesc");
                         h_location = rs.getString("Location");
                         h_location2 = rs.getString("Location2");
                         h_mat = rs.getString("Material");
                         h_con = rs.getString("confirmBy");
+                        h_bar = rs.getString("barcode");
 
                         h_b1 = rs.getString("Bundle1");
                         h_b2 = rs.getString("Bundle2");
@@ -700,24 +803,35 @@ public class Stock extends AppCompatActivity {
 
             pbbar.setVisibility(View.GONE);
             Toast.makeText(Stock.this,r,Toast.LENGTH_SHORT).show();
+         /*   if(gbar==null){
+                Intent i = new Intent(Stock.this, OndayActivity.class);
+                i.putExtra("cdat",gcdate);
+                i.putExtra("gloc",gloc);
+                startActivity(i);
+                finish();
+            }else{
+                Intent i = new Intent(Stock.this, LineData.class);
+                String chkput = h_location2;
 
-            Intent i = new Intent(Stock.this, LineData.class);
-            String chkput = h_location2;
+                if(h_location2.equals("2F") || h_location2.equals("2R")){
+                    chkput = h_location;
+                }
 
-            if(h_location2.equals("2F") || h_location2.equals("2R")){
-                chkput = h_location;
-            }
-
-            if(connectionClass.getIp().equals("116")){
-                chkput = h_location;
-            }
+                if(connectionClass.getUip().equals("192.168.116.222")){
+                    chkput = h_location;
+                }
 
 
-            i.putExtra("loc", chkput);
-            i.putExtra("loc_desc", getLocText(gbar));
+                i.putExtra("loc", chkput);
+                i.putExtra("loc_desc", getLocText(gbar));
 
-            startActivity(i);
-            finish();
+                startActivity(i);
+                finish();
+
+            }*/
+
+            onBackPressed();
+
 
         }
 
@@ -749,7 +863,7 @@ public class Stock extends AppCompatActivity {
                         upreI3 = "NULL";
                     }
 
-                    String supdate = "update tbl_physicalcount_location " +
+                    String supdate = "update STOCK.dbo.tbl_physicalcount_location " +
                             "set Bundle1 = "+getEDT(b1)+",PerBundle1 = "+getEDT(p1)+" , remainder1 = "+getEDT(i1)+" ,  " +
                             "Bundle2 = "+getEDT(b2)+",PerBundle2 = "+getEDT(p2)+" , remainder2 = "+getEDT(i2)+" , " +
                             "Bundle3 = "+getEDT(b3)+",PerBundle3 = "+getEDT(p3)+" , remainder3 = "+getEDT(i3)+" " +
@@ -761,7 +875,8 @@ public class Stock extends AppCompatActivity {
                             " ,cleft_edge = "+getEDT(eedge)+" ,not_square = "+getEDT(enotsq)+" " +
                             " ,not_equal = "+getEDT(enote)+",UserScan =  '"+usrHelper.getUserName()+"' "+close+" " +
                             " ,ChangeDate = CURRENT_TIMESTAMP " +
-                            "where barcode = '"+params[0]+"'  and confirmBy is null ";
+                            " , Remark = "+getEDTre(remark)+" , offset = '"+offSet(getEDT(offset))+"' "+
+                            "where barcode = '"+h_bar+"'  and confirmBy is null ";
 
 
 
@@ -769,6 +884,89 @@ public class Stock extends AppCompatActivity {
                     preparedStatement.executeUpdate();
 
                     Log.d("update",supdate);
+
+                    z = "Success";
+
+
+                }
+            } catch (Exception ex) {
+                z = ex.getMessage();
+
+            }
+            return z;
+        }
+    }
+
+    public class unLock extends AsyncTask<String, String, String> {
+
+        String z = "";
+
+
+        @Override
+        protected void onPreExecute() {
+
+            pbbar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onPostExecute(String r) {
+
+            pbbar.setVisibility(View.GONE);
+
+            onBackPressed();
+           // Toast.makeText(Stock.this,r,Toast.LENGTH_SHORT).show();
+         /*   if(gbar==null){
+                Intent i = new Intent(Stock.this, OndayActivity.class);
+                i.putExtra("cdat",gcdate);
+                i.putExtra("gloc",gloc);
+                startActivity(i);
+                finish();
+            }else{
+                Intent i = new Intent(Stock.this, LineData.class);
+                String chkput = h_location2;
+
+                if(h_location2.equals("2F") || h_location2.equals("2R")){
+                    chkput = h_location;
+                }
+
+                if(connectionClass.getUip().equals("192.168.116.222")){
+                    chkput = h_location;
+                }
+
+
+                i.putExtra("loc", chkput);
+                i.putExtra("loc_desc", getLocText(gbar));
+
+                startActivity(i);
+                finish();
+
+            }*/
+
+          //  onBackPressed();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                Connection con = connectionClass.CONN();
+                if (con == null) {
+                    z = "Error in connection with SQL server";
+                } else {
+
+
+                    String supdate = "update STOCK.dbo.tbl_physicalcount_location " +
+                            "set confirmBy = NULL  " +
+                            "where barcode = '"+h_bar+"'  ";
+
+                    PreparedStatement preparedStatement = con.prepareStatement(supdate);
+                    preparedStatement.executeUpdate();
+
+                   // Log.d("update",supdate);
 
                     z = "Success";
 
@@ -1042,6 +1240,16 @@ public class Stock extends AppCompatActivity {
         adjdialog.show();
 
     }
+
+  /*  @Override
+    public void onBackPressed() {
+
+     *//*   Intent i = new Intent(Stock.this, OndayActivity.class);
+        i.putExtra("cdat",gcdate);
+        i.putExtra("gloc",gloc);
+        startActivity(i);
+        finish();*//*
+    }*/
 
 
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/selector"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+
+        <TextView
+            android:id="@+id/hn"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="XXXX"
+            android:textAllCaps="false"
+            android:textColor="#152EAD"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/matc"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:textColor="#3F3F3F"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="xxxxx" />
+
+        <TextView
+            android:id="@+id/qty"
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="65dp"
+            android:foregroundGravity="center"
+            android:gravity="center_vertical"
+            android:textAlignment="textEnd"
+            android:textColor="#000000"
+            android:textSize="13sp"
+            android:textStyle="normal|bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -28,7 +28,7 @@ public class Webview extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        if(connectionClass.getIp().equals("116")){
+        if(connectionClass.getUip().equals("192.168.116.222")){
             webView.loadUrl("http://192.168.116.222/wh/physicalcount/frmcountlist.aspx");
         }else{
             webView.loadUrl("http://wh.zubbsteel.com/physicalcount/frmcountlist.aspx");
