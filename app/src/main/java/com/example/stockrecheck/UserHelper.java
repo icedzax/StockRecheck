@@ -32,15 +32,21 @@ public class UserHelper {
         this.sharedPerfs = this.context.getSharedPreferences(perfsName, perfsMode);
         this.editor = sharedPerfs.edit();
     }
-
-    public void createSession(String sUserName, String sPassword, String sPlant , String sLevel) {
+public  void setLang(int param){
+    editor.putInt("Lang", param);
+    editor.commit();
+}
+    public void createSession(String sUserName, String sPassword, String sPlant , String sLevel,String  sBranch,String sUnlock) {
         vers = new Version();
         editor.putBoolean("LoginStatus", true);
         editor.putString("Username", sUserName);
         editor.putString("Password", sPassword);
         editor.putString("Version", vers.Version.trim());
         editor.putString("Plant", sPlant);
+        editor.putString("Branch", sBranch);
         editor.putString("Level", sLevel);
+        editor.putString("Unlock", sUnlock);
+
         editor.commit();
 
     }
@@ -67,6 +73,14 @@ public class UserHelper {
     public String getLevel() {
         return sharedPerfs.getString("Level", null);
     }
-
+    public String getBranch() {
+        return sharedPerfs.getString("Branch", null);
+    }
+    public String getUnlock() {
+        return sharedPerfs.getString("Unlock", null);
+    }
+    public int getLang() {
+        return sharedPerfs.getInt("Lang", 0);
+    }
 
 }

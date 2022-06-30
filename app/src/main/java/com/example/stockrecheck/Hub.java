@@ -13,17 +13,18 @@ import android.view.View;
 import android.widget.Button;
 
 public class Hub extends AppCompatActivity {
-
+    Lang lang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hub);
-
+        lang = new Lang();
         Button stock,loc;
 
         stock = (Button)findViewById(R.id.stock);
         loc = (Button)findViewById(R.id.location);
-
+        stock.setText(lang.map.get("stock"));
+        loc.setText(lang.map.get("move"));
         stock.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {

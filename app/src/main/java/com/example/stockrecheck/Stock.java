@@ -30,7 +30,7 @@ public class Stock extends AppCompatActivity {
     UserHelper usrHelper ;
     ConnectionClass connectionClass;
     String gloc,gbar,h_location2,h_location,h_col,h_mat,h_desc,h_con,h_b1,h_b2,h_b3,h_p1,h_p2,h_p3,h_i1,h_i2,h_i3,h_itxt1,h_itxt2,h_itxt3;
-    String h_offset,h_bar,gmat,gseq,gcdate,h_remark,h_good,h_rust,h_clean,h_poor,h_edge,h_short,h_crook,h_note,h_notsq,h_0,h_seq;
+    String h_cdate,h_offset,h_bar,gmat,gseq,gcdate,h_remark,h_good,h_rust,h_clean,h_poor,h_edge,h_short,h_crook,h_note,h_notsq,h_0,h_seq;
     TextView tv_remark,tvTxtLocation,tvCol,tvChecker,tvMat,tvDesc,tvLocHead,status;
     CheckBox cgood,crust,cclean,cpoor,cedge,cshort,ccrook,cnote,cnotsq,c0,coffset;
     EditText egood,erust,eclean,epoor,eedge,eshort,ecrook,enote,enotsq,offset,remark;
@@ -57,6 +57,8 @@ public class Stock extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         usrHelper = new UserHelper(this);
         connectionClass = new ConnectionClass();
+
+
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -129,7 +131,7 @@ public class Stock extends AppCompatActivity {
             fillList.execute(gloc,gcdate,"c",gmat);
         }else{
             FillList fillList = new FillList();
-            fillList.execute(gbar,"","b","");
+            fillList.execute(gbar,gcdate,"b","");
         }
 
 
@@ -660,7 +662,10 @@ public class Stock extends AppCompatActivity {
                     closeBtn.setVisibility(View.GONE);
                     lockScreen();
 
-                    if(usrHelper.getUserName().equals("Surasak.w") || usrHelper.getUserName().equals("Tanida.p") ){
+//                    if(usrHelper.getUserName().equals("Surasak.w") || usrHelper.getUserName().equals("Tanida.p") || usrHelper.getUserName().equals("Supunsa.k")){
+//                        btnUnlock.setVisibility(View.VISIBLE);
+//                    }
+                    if(usrHelper.getUnlock().equals("10")){
                         btnUnlock.setVisibility(View.VISIBLE);
                     }
 
@@ -678,19 +683,20 @@ public class Stock extends AppCompatActivity {
                     z = "Error in connection with SQL server";
                 } else {
 
-                    String query = "select *,left(Location,2) as Location2,format(SEQ,'000') as SEQF  from STOCK.dbo.tbl_physicalcount_location where barcode = '"+params[0]+"'  ";;
+                    String query = "select *,left(Location,2) as Location2,format(SEQ,'000') as SEQF  from STOCK.dbo.tbl_physicalcount_location where barcode = '"+params[0]+"' and countdate = '"+params[1]+"' ";;
 
                     if(params[2].equals("c")){
                         query = "select *,left(Location,2) as Location2,format(SEQ,'000') as SEQF  from STOCK.dbo.tbl_physicalcount_location where Location = '"+params[0]+"' and countdate = '"+params[1]+"' and Material = '"+params[3]+"'  ";
                     }
 
 
-                    Log.d("query",query);
+//                    Log.d("query",query);
 
                     PreparedStatement ps = con.prepareStatement(query);
                     ResultSet rs = ps.executeQuery();
 
                     while (rs.next()) {
+                        h_cdate = rs.getString("countDate");
                         h_offset = rs.getString("offset");
                         h_remark = rs.getString("Remark");
                         h_col = rs.getString("Bin");
@@ -876,7 +882,7 @@ public class Stock extends AppCompatActivity {
                             " ,not_equal = "+getEDT(enote)+",UserScan =  '"+usrHelper.getUserName()+"' "+close+" " +
                             " ,ChangeDate = CURRENT_TIMESTAMP " +
                             " , Remark = "+getEDTre(remark)+" , offset = '"+offSet(getEDT(offset))+"' "+
-                            "where barcode = '"+h_bar+"'  and confirmBy is null ";
+                            "where barcode = '"+h_bar+"' and countDate = '"+h_cdate+"' and confirmBy is null ";
 
 
 
@@ -961,7 +967,7 @@ public class Stock extends AppCompatActivity {
 
                     String supdate = "update STOCK.dbo.tbl_physicalcount_location " +
                             "set confirmBy = NULL  " +
-                            "where barcode = '"+h_bar+"'  ";
+                            "where barcode = '"+h_bar+"' and countDate = '"+h_cdate+"' ";
 
                     PreparedStatement preparedStatement = con.prepareStatement(supdate);
                     preparedStatement.executeUpdate();

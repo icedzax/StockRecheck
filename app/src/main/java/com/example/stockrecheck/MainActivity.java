@@ -1,15 +1,20 @@
 package com.example.stockrecheck;
 
+import static com.example.stockrecheck.OndayActivity.DATE_DIALOG_ID;
+
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Parcelable;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -23,6 +28,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,6 +41,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,13 +107,40 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_section,tv_bin,tv_re;
     LocationHelper lch;
 
+    static String search_plant = "";
+    LocationHelper locHelp;
 
-
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    private TextView mDateDisplay;
+    public  static  String paramdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_count);
+
+        connectionClass = new ConnectionClass();
+        usrHelper = new UserHelper(this);
+        locHelp = new LocationHelper(this);
+
+        LocationBin lb = new LocationBin();
+        lb.execute(usrHelper.getBranch());
+
+
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        connectionClass.setUdbn("PP");
+        connectionClass.setUip("192.168.100.222");
+        connectionClass.setUpass("");
+
+    /*    if(ip!= null && ip.substring(8,10).equals("81")){
+            connectionClass.setUdbn("scale_mmt");
+            connectionClass.setUip("199.0.0.100");
+            connectionClass.setUpass("itsteel1983");
+        }*/
 
         hideEdt = findViewById(R.id.hedt3);
         pbbar = (ProgressBar)findViewById(R.id.pbbar);
@@ -114,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 //        btndiff = findViewById(R.id.btnwv);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        usrHelper = new UserHelper(this);
+
         lch = new LocationHelper(MainActivity.this);
         connectionClass = new ConnectionClass();
         lstdo = (ListView) findViewById(R.id.lstdo);
@@ -122,6 +156,18 @@ public class MainActivity extends AppCompatActivity {
         tv_section = (TextView)findViewById(R.id.tv_sec);
         tv_bin = (TextView)findViewById(R.id.tv_bin);
         tv_re = (TextView)findViewById(R.id.tv_re);
+        mDateDisplay = (TextView) findViewById(R.id.mDateDisplay2);
+
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+        updateDisplay();
+//
+//        connectionClass.setUdbn("PP");
+//        connectionClass.setUip("192.168.100.222");
+//        connectionClass.setUpass("");
+
 
 
 /*smoothScrollToPosition(22);
@@ -210,8 +256,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(rsscan.length()>0){
 
-           /* SendParam spr = new SendParam();
-            spr.execute(rsscan.trim());*/
+            SendParam spr = new SendParam();
+            spr.execute(rsscan.trim());
 
             this.hideEdt.setText("");
         }else{
@@ -243,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
                 FillList fillList = new FillList();
                 setTvMat("ALL");
-                fillList.execute(getCurSec(),getCurBin(),getCurMatGroup());
+                fillList.execute(getCurSec(),getCurBin(),getCurMatGroup(),paramdate);
                 setPos(0);
 
             }
@@ -271,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
                 setTvMat(set[which]);
                 FillList fillList = new FillList();
-                fillList.execute(getCurSec(),getCurBin(),getCurMatGroup());
+                fillList.execute(getCurSec(),getCurBin(),getCurMatGroup(),paramdate);
 
                 setPos(0);
 
@@ -319,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
                 tv_bin.setText(getCurBin());
                 setTvMat("ALL");
                 FillList fillList = new FillList();
-                fillList.execute(getCurSec(),getCurBin(),getCurMatGroup());
+                fillList.execute(getCurSec(),getCurBin(),getCurMatGroup(),paramdate);
                 setPos(0);
                 dialog.dismiss();
             }
@@ -449,6 +495,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent i = new Intent(MainActivity.this, Stock.class);
                     i.putExtra("bar", pickBarCode);
+                    i.putExtra("cdate", paramdate);
                     setPos(arg2);
 
 
@@ -482,17 +529,32 @@ public class MainActivity extends AppCompatActivity {
                     if(params[2]==null || params[2].equals("") || params[2].equals("null") || params[2].equals("ALL")){
                         imat = "";
                     }
+                    String dd = "";
+
+                    if(params[3] != null || params[3].equals("")){
+                        dd = " and countdate = '"+params[3]+"' ";
+                    }
+
                     String plant = "";
-                    switch (usrHelper.getPlant()){
-                        case  "ZUBB" : plant = " plant in ('P8','P1') ";
+                    switch (usrHelper.getBranch()){
+                        case  "ZUBB" : plant = " plant in ('P8','P1','WHQ') ";
+                            break;
+                        case  "RS" : plant = " plant in ('P8','P1','WHQ') ";
                             break;
                         case  "SPN" : plant = " plant = 'WPN' ";
                             break;
-                        case  "OPS" : plant = " plant = 'WPN' ";
+                        case  "OPS" : plant = " plant in ('OPS') ";
+                            break;
+                        case  "OCP" : plant = " plant in ('OC5','OC6') ";
+                            break;
+                        case  "SPS" : plant = " plant in ('SPS') ";
+                            break;
+                        case  "MMT" : plant = " plant in ('MR7','MR8','MMT') ";
                             break;
                     }
+                    search_plant =  plant;
 
-                    String query = "select * from STOCK.dbo.vw_list_bin where "+plant+" and  location = '"+params[0]+"' "+ibin+" "+imat+" order by location,bin";
+                    String query = "select * from STOCK.dbo.vw_list_bin where "+plant+" and  location = '"+params[0]+"' "+ibin+" "+imat+" "+dd+" order by location,bin";
 
 //                    String query = "select * from STOCK.dbo.vw_list_bin where location = '1R' order by location,bin";
                     Log.d("query",query);
@@ -549,6 +611,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent i = new Intent(MainActivity.this, Stock.class);
                 i.putExtra("bar", bar.trim());
+                i.putExtra("cdate", paramdate);
                 startActivity(i);
                 //finish();
             }
@@ -565,10 +628,21 @@ public class MainActivity extends AppCompatActivity {
                 if (con == null) {
                     z = "Error in connection with SQL server";
                 } else {
+                    String getMat = "";
+                    String barid = "select top 1 matcode from vw_barcode_item where bar_id = '"+params[0]+"' ";
+                    PreparedStatement bs = con.prepareStatement(barid);
+                    ResultSet brs = bs.executeQuery();
+                    while (brs.next()) {
+                        getMat = brs.getString("matcode");
+                    }
 
 
+                    String fBin = " and  bin = '"+getCurBin()+"' ";
 
-                    String fetch = "select barcode from tbl_physicalcount_location where barcode = '"+params[0]+"' ";
+                    if (getCurBin() == null || getCurBin().equals("")){
+                        fBin = "";
+                    }
+                    String fetch = "select top 1 barcode from [STOCK].[dbo].vw_list_bin where Material = '"+getMat+"'  and "+search_plant+" and location = '"+getCurSec()+"' "+fBin+"  ";
                     PreparedStatement ps = con.prepareStatement(fetch);
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
@@ -610,17 +684,28 @@ public class MainActivity extends AppCompatActivity {
                     int size = 0;
 
                     String plant = "";
-                    switch (usrHelper.getPlant()){
-                        case  "ZUBB" : plant = " plant in ('P8','P1') ";
+                    switch (usrHelper.getBranch()){
+                        case  "ZUBB" : plant = " plant in ('P8','P1','WHQ') ";
+                            break;
+                        case  "RS" : plant = " plant in ('P8','P1','WHQ') ";
                             break;
                         case  "SPN" : plant = " plant = 'WPN' ";
+                            break;
+                        case  "OPS" : plant = " plant in ('OPS') ";
+                            break;
+                        case  "OCP" : plant = " plant in ('OC5','OC6') ";
+                            break;
+                        case  "SPS" : plant = " plant in ('SPS') ";
+                            break;
+                        case  "MMT" : plant = " plant in ('MR7','MR8','MMT') ";
                             break;
                     }
 
 
+
                     String cq = "SELECT COUNT(DISTINCT(replace(replace([MatGroup],'เหล็ก',''),'เส้น',''))) as x\n" +
                             "                    FROM [STOCK].[dbo].[tbl_physicalcount_location]\n" +
-                            "                    where "+plant+" and [MatGroup] is not null and location = '"+isNull(loc)+"' "+sbin+" ";
+                            "                    where "+plant+" and countdate = '"+paramdate+"' and [MatGroup] is not null and location = '"+isNull(loc)+"' "+sbin+" ";
                     PreparedStatement cts = con.prepareStatement(cq);
                     ResultSet co = cts.executeQuery();
 
@@ -631,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
                     result[0] = "ALL";
                     String squery = "SELECT replace(replace([MatGroup],'เหล็ก',''),'เส้น','') as rr\n" +
                             "  FROM [STOCK].[dbo].[tbl_physicalcount_location]\n" +
-                            "   where "+plant+" and [MatGroup] is not null and location ='"+isNull(loc)+"'  "+sbin+" \n" +
+                            "   where "+plant+" and countdate = '"+paramdate+"' and [MatGroup] is not null and location ='"+isNull(loc)+"'  "+sbin+" \n" +
                             "  group by   replace(replace([MatGroup],'เหล็ก',''),'เส้น','')" ;
                     PreparedStatement sts = con.prepareStatement(squery);
                     ResultSet sbs = sts.executeQuery();
@@ -656,7 +741,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
 //        Toast.makeText(MainActivity.this, "onresume", Toast.LENGTH_SHORT).show();
         FillList fillList = new FillList();
-        fillList.execute(getCurSec(),getCurBin(),getCurMatGroup());
+        fillList.execute(getCurSec(),getCurBin(),getCurMatGroup(),paramdate);
         //lstdo.smoothScrollToPositionFromTop(0);
 //        lstdo.smoothScrollToPosition(7);
         setIsInit(true);
@@ -667,6 +752,175 @@ public class MainActivity extends AppCompatActivity {
         lstdo.smoothScrollToPositionFromTop(13,0,0);
 
     }
+
+    public class LocationBin extends AsyncTask<String, String, String> {
+
+        //String z = "";
+        //Boolean isSuccess = false;
+
+        @Override
+        protected void onPreExecute() {
+
+            //   pbbar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onPostExecute(String r) {
+
+            //  pbbar.setVisibility(View.GONE);
+
+
+
+        }
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                Connection con =  connectionClass.CONN();
+
+                if (con == null) {
+
+                } else {
+
+                    switch (params[0]){
+                        case  "ZUBB" : params[0] = " plant2 in ('ZUBB') ";
+                            break;
+                        case  "RS" : params[0] = " plant2 in ('ZUBB') ";
+                            break;
+                        case  "SPN" : params[0] = " plant2 = 'WPN' ";
+                            break;
+                        case  "OPS" : params[0] = " plant2 in ('OPS') ";
+                            break;
+                        case  "OCP" : params[0] = " plant2 in ('OC5','OC6') ";
+                            break;
+                        case  "SPS" : params[0] = " plant2 in ('SPS') ";
+                            break;
+                        case  "MMT" : params[0] = " plant2 in ('MR7','MR8','MMT') ";
+                            break;
+                    }
+
+
+
+                    String query = "select location from vw_storage where  "+params[0]+" " ;
+                    PreparedStatement ts = con.prepareStatement(query);
+                    ResultSet bs = ts.executeQuery();
+                    locHelp.StorageList.clear();
+                    while (bs.next()) {
+                        locHelp.StorageList.add(bs.getString("location"));
+                    }
+
+                    String squery = "select storage from vw_storage where "+params[0]+" group by storage" ;
+                    PreparedStatement sts = con.prepareStatement(squery);
+                    ResultSet sbs = sts.executeQuery();
+                    locHelp.storages.clear();
+                    while (sbs.next()) {
+                        locHelp.storages.add(sbs.getString("storage"));
+                    }
+
+                  /*  String equery = "SELECT section\n" +
+                            "     ,replace(case when right(section,1) ='R' then left(section,1)+' ขวา'\n" +
+                            "\t when right(section,1) ='L' then left(section,1)+' ซ้าย'\n" +
+                            "\t else section  end ,'A','10') section_d\n" +
+                            "\n" +
+                            "  FROM vw_storage where plant = '"+params[0]+"' \n" +
+                            "  group by section" ;*/
+
+                    String equery = " SELECT section,case when right(section,1) ='R' then left(section,1)+' ขวา' \n" +
+                            "when right(section,1) ='L' then left(section,1)+' ซ้าย' \n" +
+                            "when right(section,1) ='C' then left(section,1)+' กลาง' \n" +
+                            "else section  end section_d,storage \n" +
+                            "FROM vw_storage where  "+params[0]+" \n" +
+                            "group by section,storage ";
+
+                    PreparedStatement ets = con.prepareStatement(equery);
+                    ResultSet ebs = ets.executeQuery();
+
+                    locHelp.section_d.clear();
+                    locHelp.sections.clear();
+//                    locHelp.hashMap.clear();
+                    locHelp.seclist.clear();
+
+                    int i = 0;
+                    while (ebs.next()) {
+
+                        locHelp.section_d.add(ebs.getString("section_d"));
+                        locHelp.sections.add(ebs.getString("section"));
+
+                        Map<String, String> datanum = new HashMap<String, String>();
+                        datanum.put(ebs.getString("storage"),ebs.getString("section"));
+                        locHelp.seclist.add(datanum);
+//                        locHelp.mapStorage.put(ebs.getString("storage"),ebs.getString("section");
+//                        i++;
+                    }
+                }
+            } catch (Exception ex) {
+
+            }
+            return "";
+        }
+    }
+
+    public void onDateclick(View v) {
+
+        showDialog(DATE_DIALOG_ID);
+//        Toast.makeText(MainActivity.this, "id "+this.idate+"\n"+"pd "+this.paramdate, Toast.LENGTH_LONG).show();
+    }
+    private void updateDisplay() {
+        String m;
+        String d;
+        this.mDateDisplay.setText(
+                new StringBuilder()
+
+                        .append(mDay).append("/")
+                        .append(mMonth + 1).append("/")
+                        .append(mYear + 543).append(" "));
+
+        if((mMonth+1)< 10){
+            m =  "0"+(mMonth+1);
+        }else{
+            m = String.valueOf((mMonth + 1));
+        }
+        if((mDay)<= 9){
+            d =  "0"+(mDay);
+        }else{
+            d = String.valueOf((mDay));
+        }
+
+
+        paramdate = mYear+""+m+""+d;
+
+//         Toast.makeText(MainActivity.this, this.paramdate, Toast.LENGTH_LONG).show();
+
+    }
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+                public void onDateSet(DatePicker view, int year,
+                                      int monthOfYear, int dayOfMonth) {
+                    mYear = year;
+                    mMonth = monthOfYear;
+                    mDay = dayOfMonth;
+                    updateDisplay();
+
+                    FillList fillList = new FillList();
+                    fillList.execute(getCurSec(),getCurBin(),getCurMatGroup(),paramdate);
+                }
+            };
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                return new DatePickerDialog(this,
+                        mDateSetListener,
+                        mYear, mMonth, mDay);
+
+        }
+        return null;
+    }
+
 
 
 }

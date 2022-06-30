@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Environment;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -45,22 +46,25 @@ public class CheckVersion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_version);
-
+//        Log.d("PATH", String.valueOf(Environment.getExternalStorageDirectory()));
         connectionClass = new ConnectionClass();
 
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        lurl = "http://report.zubbsteel.com/version/version.php?n=";
+        lurl = "http://report.zubbsteel.com/version/dl.php?n=";
         connectionClass.setUdbn("PP");
         connectionClass.setUip("192.168.100.222");
         connectionClass.setUpass("");
 
-        if(ip!= null && ip.substring(8,10).equals("81")){
-            connectionClass.setUdbn("PP");
-            connectionClass.setUip("199.0.0.100");
-            connectionClass.setUpass("itsteel1983");
-            lurl = "http://199.0.0.16/version/version.php?n=";
-        }
+//        if(ip!= null && ip.substring(8,10).equals("81")){
+//            connectionClass.setUdbn("PP");
+//            connectionClass.setUip("199.0.0.100");
+//            connectionClass.setUpass("itsteel1983");
+//            lurl = "http://199.0.0.16/version/version.php?n=";
+//        }
+
+
+       // openFolder();
 
         vers = new Version();
 
@@ -178,6 +182,7 @@ public class CheckVersion extends AppCompatActivity {
 
         }
 
+
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
 
@@ -209,8 +214,8 @@ public class CheckVersion extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
 
             }else{
-
-                Toast.makeText(getApplicationContext(),"Error: Try Again",
+//                Log.d("PATH", "onPostExecute: "+result);
+                Toast.makeText(getApplicationContext(),"Error: "+result,
                         Toast.LENGTH_SHORT).show();
 
             }
@@ -231,7 +236,11 @@ public class CheckVersion extends AppCompatActivity {
                 c.setDoOutput(true);
                 c.connect();
 
+
+
                 String PATH = Environment.getExternalStorageDirectory()+"/Download/";
+
+
                 File file = new File(PATH);
                 file.mkdirs();
 
@@ -260,12 +269,12 @@ public class CheckVersion extends AppCompatActivity {
                 }
                 fos.close();
                 is.close();
-
+//                PATH = "/sdcard/Download/";
                 OpenNewVersion(PATH);
 
                 flag = true;
             } catch (Exception e) {
-                //Log.e(TAG, "Update Error: " + e.getMessage());
+//                Log.d("PATH", "Update Error: " + e.getMessage());
 
                 flag = false;
             }
@@ -277,12 +286,20 @@ public class CheckVersion extends AppCompatActivity {
 
     void OpenNewVersion(String location) {
 
+//        String XPATH = "/Internal storage/Download/";
+//        location = XPATH;
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(new File(location + app_name+".apk")),
                 "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
+    }
+    public void openFolder(){
+       /* Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Uri uri = Uri.parse(Environment.getExternalStorageDirectory()+  File.separator + "Downloads" + File.separator);
+        intent.setDataAndType(uri, "text/csv");
+        startActivity(Intent.createChooser(intent, "Open folder"));*/
     }
 
 }

@@ -6,8 +6,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -44,7 +46,7 @@ public class StockMmt extends AppCompatActivity {
     ListView lv_hn;
     List<Map<String, String>> hnlist  = new ArrayList<Map<String, String>>();
     TextView hn,tv_loc,tv_storage,tv_section,tv_bin,tv_sumb,tv_sumq,del;
-
+    LocationHelper locHelp;
     FillList fillList;
     LocationHelper lch;
     Line sLine;
@@ -152,8 +154,6 @@ public class StockMmt extends AppCompatActivity {
         StockMmt.sbin = sbin;
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +163,24 @@ public class StockMmt extends AppCompatActivity {
         urs = new UserHelper(StockMmt.this);
         lch = new LocationHelper(StockMmt.this);
         sLine = new Line();
+        locHelp = new LocationHelper(this);
+
+        LocationBin lb = new LocationBin();
+        lb.execute(urs.getBranch());
+
+
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        connectionClass.setUdbn("PP");
+        connectionClass.setUip("192.168.100.222");
+        connectionClass.setUpass("");
+
+        if(ip!= null && ip.substring(8,10).equals("81")){
+            connectionClass.setUdbn("scale_mmt");
+            connectionClass.setUip("199.0.0.100");
+            connectionClass.setUpass("itsteel1983");
+        }
 
         pbbar = (ProgressBar)findViewById(R.id.pbbar);
         hideEdt = (EditText)findViewById(R.id.hedt2);
@@ -224,8 +242,6 @@ public class StockMmt extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 }else{
-
-
                     AlertDialog.Builder builder =
                             new AlertDialog.Builder(StockMmt.this);
                     builder.setTitle("ยกเลิกรายการ");
@@ -484,7 +500,7 @@ public class StockMmt extends AppCompatActivity {
 
                    // Log.d("where" , where);
 
-                    String sql = "select  *  from vw_stock_check  "+where+"  ";
+                    String sql = "select  *  from vw_stock_check  "+where+"   order by user_stamp desc ";
                     if(SectionMode == true){
                         where = " where location like '"+getRs()+"%' and flag is null ";
                         sql = "select  location,matcode,count(id)as b , sum(qty) as q  from vw_stock_check "+where+"  group by location,matcode ";
@@ -1415,10 +1431,113 @@ public class StockMmt extends AppCompatActivity {
 
     }
 
+    public class LocationBin extends AsyncTask<String, String, String> {
+
+        //String z = "";
+        //Boolean isSuccess = false;
+
+        @Override
+        protected void onPreExecute() {
+
+            //   pbbar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onPostExecute(String r) {
+
+            //  pbbar.setVisibility(View.GONE);
 
 
 
+        }
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                Connection con =  connectionClass.CONN();
+
+                if (con == null) {
+
+                } else {
+
+                    switch (params[0]){
+                        case  "ZUBB" : params[0] = " plant2 in ('ZUBB') ";
+                            break;
+                        case  "RS" : params[0] = " plant2 in ('ZUBB') ";
+                            break;
+                        case  "SPN" : params[0] = " plant2 = 'WPN' ";
+                            break;
+                        case  "OPS" : params[0] = " plant2 in ('OPS','OC5','OC6') ";
+                            break;
+                        case  "OCP" : params[0] = " plant2 in ('OPS','OC5','OC6') ";
+                            break;
+                        case  "SPS" : params[0] = " plant2 in ('SPS') ";
+                            break;
+                        case  "MMT" : params[0] = " plant2 in ('MR7','MR8','MMT') ";
+                            break;
+                    }
 
 
+
+                    String query = "select location from vw_storage where  "+params[0]+" " ;
+                    PreparedStatement ts = con.prepareStatement(query);
+                    ResultSet bs = ts.executeQuery();
+                    locHelp.StorageList.clear();
+                    while (bs.next()) {
+                        locHelp.StorageList.add(bs.getString("location"));
+                    }
+
+                    String squery = "select storage from vw_storage where "+params[0]+" group by storage" ;
+                    PreparedStatement sts = con.prepareStatement(squery);
+                    ResultSet sbs = sts.executeQuery();
+                    locHelp.storages.clear();
+                    while (sbs.next()) {
+                        locHelp.storages.add(sbs.getString("storage"));
+                    }
+
+                  /*  String equery = "SELECT section\n" +
+                            "     ,replace(case when right(section,1) ='R' then left(section,1)+' ขวา'\n" +
+                            "\t when right(section,1) ='L' then left(section,1)+' ซ้าย'\n" +
+                            "\t else section  end ,'A','10') section_d\n" +
+                            "\n" +
+                            "  FROM vw_storage where plant = '"+params[0]+"' \n" +
+                            "  group by section" ;*/
+
+                    String equery = " SELECT section,case when right(section,1) ='R' then left(section,1)+' ขวา' \n" +
+                            "when right(section,1) ='L' then left(section,1)+' ซ้าย' \n" +
+                            "when right(section,1) ='C' then left(section,1)+' กลาง' \n" +
+                            "else section  end section_d,storage \n" +
+                            "FROM vw_storage where  "+params[0]+" \n" +
+                            "group by section,storage ";
+
+                    PreparedStatement ets = con.prepareStatement(equery);
+                    ResultSet ebs = ets.executeQuery();
+
+                    locHelp.section_d.clear();
+                    locHelp.sections.clear();
+//                    locHelp.hashMap.clear();
+                    locHelp.seclist.clear();
+
+                    int i = 0;
+                    while (ebs.next()) {
+
+                        locHelp.section_d.add(ebs.getString("section_d"));
+                        locHelp.sections.add(ebs.getString("section"));
+
+                        Map<String, String> datanum = new HashMap<String, String>();
+                        datanum.put(ebs.getString("storage"),ebs.getString("section"));
+                        locHelp.seclist.add(datanum);
+//                        locHelp.mapStorage.put(ebs.getString("storage"),ebs.getString("section");
+//                        i++;
+                    }
+                }
+            } catch (Exception ex) {
+
+            }
+            return "";
+        }
+    }
 
 }
