@@ -25,6 +25,7 @@ public class Hub extends AppCompatActivity {
         loc = (Button)findViewById(R.id.location);
         stock.setText(lang.map.get("stock"));
         loc.setText(lang.map.get("move"));
+
         stock.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {

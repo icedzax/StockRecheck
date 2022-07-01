@@ -45,12 +45,12 @@ public class StockMmt extends AppCompatActivity {
 
     ListView lv_hn;
     List<Map<String, String>> hnlist  = new ArrayList<Map<String, String>>();
-    TextView hn,tv_loc,tv_storage,tv_section,tv_bin,tv_sumb,tv_sumq,del;
+    TextView hn,tv_loc,tv_storage,tv_section,tv_bin,tv_sumb,tv_sumq,del,total,pole_no;
     LocationHelper locHelp;
     FillList fillList;
     LocationHelper lch;
     Line sLine;
-
+    Lang lang;
     String scanresult,tab_id,tab_hn;
     String rmd_date,charge,bundle,qty,qa_grade,matcode,weight,rmd_grade,remark,dupName,dupBy,dupWhen,dupHn,dupMat;
 
@@ -156,6 +156,7 @@ public class StockMmt extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        lang = new Lang();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_mmt);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -168,31 +169,37 @@ public class StockMmt extends AppCompatActivity {
         LocationBin lb = new LocationBin();
         lb.execute(urs.getBranch());
 
-
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+//
+//        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+//        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
         connectionClass.setUdbn("PP");
         connectionClass.setUip("192.168.100.222");
         connectionClass.setUpass("");
 
-        if(ip!= null && ip.substring(8,10).equals("81")){
-            connectionClass.setUdbn("scale_mmt");
-            connectionClass.setUip("199.0.0.100");
-            connectionClass.setUpass("itsteel1983");
-        }
+//        if(ip!= null && ip.substring(8,10).equals("81")){
+//            connectionClass.setUdbn("scale_mmt");
+//            connectionClass.setUip("199.0.0.100");
+//            connectionClass.setUpass("itsteel1983");
+//        }
 
         pbbar = (ProgressBar)findViewById(R.id.pbbar);
         hideEdt = (EditText)findViewById(R.id.hedt2);
         lv_hn = (ListView)findViewById(R.id.lvitem);
         tv_storage = (TextView)findViewById(R.id.tv_rmd);
+        tv_storage.setText(lang.map.get("machine"));
         tv_section = (TextView)findViewById(R.id.tv_sec);
+        tv_section.setText(lang.map.get("channal"));
         tv_bin = (TextView)findViewById(R.id.tv_bin);
+        tv_bin.setText(lang.map.get("pole"));
         tv_sumb = (TextView)findViewById(R.id.tv_sumbun) ;
         tv_sumq = (TextView)findViewById(R.id.tv_sumqty) ;
         del = (TextView)findViewById(R.id.del) ;
+        del.setText(lang.map.get("cancel"));
         tv_loc = (TextView)findViewById(R.id.tv_test);
         hn = (TextView)findViewById(R.id.hn);
+        total = (TextView)findViewById(R.id.textView19);
+        total.setText(lang.map.get("total"));
 
         pbbar.setVisibility(View.GONE);
 
@@ -579,11 +586,13 @@ public class StockMmt extends AppCompatActivity {
         String[] set = {""};
 
         switch (t){
-            case 0 : head ="ตำแหน่งเก็บ"; set = rmd_set;
+            case 0 : head = lang.map.get("save_location"); set = rmd_set;
                 break;
-            case 1 : head ="ช่อง"; set = sec_set;
+            case 1 : head = lang.map.get("channal"); set = sec_set;
                 break;
         }
+
+
 
         builder.setTitle(head);
 
@@ -667,6 +676,7 @@ public class StockMmt extends AppCompatActivity {
 
         svbtn =(Button)dialog.findViewById(R.id.mbtnSave) ;
         cnbtn =(Button)dialog.findViewById(R.id.mbtnCan) ;
+
         hn = (TextView)dialog.findViewById(R.id.d_hn);
         mat = (TextView)dialog.findViewById(R.id.d_mat);
         dstr = (TextView)dialog.findViewById(R.id.d_rmd);
@@ -713,7 +723,6 @@ public class StockMmt extends AppCompatActivity {
 
                 final EditText edtPil = (EditText)dialog.findViewById(R.id.edtPil);
                 Button btnSv = (Button)dialog.findViewById(R.id.btnSv);
-
                 btnSv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1297,7 +1306,7 @@ public class StockMmt extends AppCompatActivity {
 
                 .setTitle("ยืนยันการทำซ้ำ")
                 .setMessage(msg)
-                .setPositiveButton("ยินยัน", new DialogInterface.OnClickListener() {
+                .setPositiveButton("ยืนยัน", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ConfirmAdd cfa = new ConfirmAdd();
                         cfa.execute(c_bar_id);
@@ -1413,7 +1422,9 @@ public class StockMmt extends AppCompatActivity {
 
         final EditText edtPil = (EditText)dialog.findViewById(R.id.edtPil);
         Button btnSv = (Button)dialog.findViewById(R.id.btnSv);
-
+        btnSv.setText(lang.map.get("confirm"));
+        pole_no = (TextView)dialog.findViewById(R.id.textView3);
+        pole_no.setText(lang.map.get("pole"));
         btnSv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

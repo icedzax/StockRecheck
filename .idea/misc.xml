@@ -3,31 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_check_version.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_create_tag.xml" value="0.30978260869565216" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_cstock.xml" value="0.20833333333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_dev.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_hub.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_line_data.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_login.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_main.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_onday.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_plan_list_item.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_stock.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_stock_count.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/activity_stock_mmt.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_hub.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_line_data.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_login.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_main.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_onday.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_stock.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_webview.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/content_welcome.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/dialog_adjust.xml" value="0.33" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/dialog_location_picker.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/dialog_manaul.xml" value="0.22552083333333334" />
-        <entry key="..\:/Jannarong/Android/HH/Z-Stockrecheck/app/src/main/res/layout/dialog_pil_picker.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/activity_check_version.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/activity_hub.xml" value="0.18840579710144928" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/activity_plan_list_item.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/activity_stock_count.xml" value="0.18840579710144928" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/activity_stock_mmt.xml" value="0.21965579710144928" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/content_hub.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/content_line_data.xml" value="0.21965579710144928" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/dialog_adjust.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/dialog_do_pend.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/dialog_location_picker.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/dialog_manaul.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/dialog_pil_picker.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/siirikarn.s/Desktop/works/StockRecheck/app/src/main/res/layout/dialog_test.xml" value="0.12360688956433637" />
       </map>
     </option>
   </component>

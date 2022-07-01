@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     ConnectionClass connectionClass;
     ListView lstdo;
     EditText hideEdt;
-    TextView tv_section,tv_bin,tv_re;
+    TextView tv_section,tv_bin,tv_re,hn,qty,pole_no;
     LocationHelper lch;
 
     static String search_plant = "";
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private int mDay;
     private TextView mDateDisplay;
     public  static  String paramdate;
-
+    Lang lang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         LocationBin lb = new LocationBin();
         lb.execute(usrHelper.getBranch());
-
-
+        lang = new Lang();
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
@@ -154,9 +153,18 @@ public class MainActivity extends AppCompatActivity {
         lstdo = (ListView) findViewById(R.id.lstdo);
 
         tv_section = (TextView)findViewById(R.id.tv_sec);
+        tv_section.setText(lang.map.get("channal"));
         tv_bin = (TextView)findViewById(R.id.tv_bin);
+        tv_bin.setText(lang.map.get("pole"));
         tv_re = (TextView)findViewById(R.id.tv_re);
+        tv_re.setText(lang.map.get("product"));
+        hn = (TextView)findViewById(R.id.hn);
+        hn.setText(lang.map.get("channal"));
+        qty = (TextView)findViewById(R.id.qty);
+        qty.setText(lang.map.get("amount"));
+
         mDateDisplay = (TextView) findViewById(R.id.mDateDisplay2);
+
 
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
@@ -273,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         String[] sec_set = lch.section_d.toArray(new String[lch.section_d.size()]);
         final String[] rmd_sections = lch.sections.toArray(new String[lch.sections.size()]);
 
-        head ="ช่อง"; set = sec_set;
+        head =lang.map.get("channal"); set = sec_set;
         builder.setTitle(head);
         final String[] finalSet = set;
 
@@ -304,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
 
         final String[] set = arrMatGroup(getCurSec(),getCurBin());
 
-        builder.setTitle("กลุ่มสินค้า");
+        builder.setTitle(lang.map.get("productgroup"));
         final String[] finalSet = set;
 
         builder.setItems(set, new DialogInterface.OnClickListener() {
@@ -355,7 +363,9 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText edtPil = (EditText)dialog.findViewById(R.id.edtPil);
         Button btnSv = (Button)dialog.findViewById(R.id.btnSv);
-
+        btnSv.setText(lang.map.get("confirm"));
+        pole_no = (TextView)dialog.findViewById(R.id.textView3);
+        pole_no.setText(lang.map.get("pole"));
         btnSv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -827,7 +837,7 @@ public class MainActivity extends AppCompatActivity {
                             "  FROM vw_storage where plant = '"+params[0]+"' \n" +
                             "  group by section" ;*/
 
-                    String equery = " SELECT section,case when right(section,1) ='R' then left(section,1)+' ขวา' \n" +
+                    String equery = " SELECT section,case when right(section,1) ='R' then left(section,1)+' ขวา'\n" +
                             "when right(section,1) ='L' then left(section,1)+' ซ้าย' \n" +
                             "when right(section,1) ='C' then left(section,1)+' กลาง' \n" +
                             "else section  end section_d,storage \n" +
