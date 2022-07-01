@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">ย้ายเสา 3.22</string>
-    <string name="action_settings">ย้ายเสา 3.22</string>
-    <string name="title_activity_login">ย้ายเสา 3.22</string>
-    <string name="title_activity_line_data">ย้ายเสา 3.22</string>
-    <string name="title_activity_stock">ย้ายเสา 3.22</string>
-    <string name="title_activity_check_version">ย้ายเสา 3.22</string>
-    <string name="title_activity_webview">ย้ายเสา 3.22</string>
-    <string name="title_activity_welcome">ย้ายเสา 3.22</string>
-    <string name="title_activity_onday">ย้ายเสา 3.22</string>
+    <string name="app_name">ย้ายเสา 3.36</string>
+    <string name="action_settings">ย้ายเสา 3.36</string>
+    <string name="title_activity_login">ย้ายเสา 3.36</string>
+    <string name="title_activity_line_data">ย้ายเสา 3.36</string>
+    <string name="title_activity_stock">ย้ายเสา 3.36</string>
+    <string name="title_activity_check_version">ย้ายเสา 3.36</string>
+    <string name="title_activity_webview">ย้ายเสา 3.36</string>
+    <string name="title_activity_welcome">ย้ายเสา 3.36</string>
+    <string name="title_activity_onday">ย้ายเสา 3.36</string>
     <string name="title_activity_dev">Dev</string>
     <string name="title_activity_hub">Hub</string>
     <!-- Strings used for fragments for navigation -->

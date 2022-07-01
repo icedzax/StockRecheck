@@ -5,14 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonObject;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,46 +13,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class Login extends AppCompatActivity {
 
     ConnectionClass connectionClass;
-    String username ,id,gPass,gver,plant,level;
+    String username ,id,gPass,gver,plant,level,branch,unlock;
     UserHelper usrHelper ;
     LocationHelper locHelp;
-    Button btnLogin ,b1,b2,b3,b4,b5,b6,b7,b8,b9,b0,bd;
+    Button btnLogin ,b1,b2,b3,b4,b5,b6,b7,b8,b9,b0,bd,btn_lang;
     ProgressBar pbbar;
     TextView izeText,ver ;
     Version vers ;
-
-
+    Lang lang;
 
 
     @Override
@@ -71,9 +43,10 @@ public class Login extends AppCompatActivity {
         usrHelper = new UserHelper(this);
         locHelp = new LocationHelper(this);
         connectionClass = new ConnectionClass();
-
-
-
+        lang = new Lang();
+        Log.d("PATH", "onCreate: "+Environment.getExternalStorageDirectory());
+        usrHelper.setLang(0);
+        lang.setMap(0);
         izeText = (TextView) findViewById(R.id.izetext);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         ver = (TextView) findViewById(R.id.ver);
@@ -84,6 +57,7 @@ public class Login extends AppCompatActivity {
         b4 = (Button) findViewById(R.id.b4); b9 = (Button) findViewById(R.id.b9);
         b5 = (Button) findViewById(R.id.b5); b0 = (Button) findViewById(R.id.b0);
         bd = (Button) findViewById(R.id.bd);
+        btn_lang = (Button) findViewById(R.id.btn_lang);
         pbbar.setVisibility(View.GONE);
         gver = vers.Version;
         ver.setText("ver : "+gver);
@@ -206,13 +180,25 @@ public class Login extends AppCompatActivity {
                 if (con == null) {
 
                 } else {
-                    if ( params[0].equals("RS")) {
-                        params[0] = "ZUBB";
+
+                    switch (params[0]){
+                        case  "RS" :
+                        case  "ZUBB" : params[0] = " plant2 in ('ZUBB') ";
+                            break;
+                        case  "SPN" : params[0] = " plant2 = 'WPN' ";
+                            break;
+                        case  "OCP" :
+                        case  "OPS" : params[0] = " plant2 in ('OPS','OC5','OC6') ";
+                            break;
+                        case  "SPS" : params[0] = " plant2 in ('SPS') ";
+                            break;
+                        case  "MMT" : params[0] = " plant2 in ('MR7','MR8','MMT') ";
+                            break;
                     }
-                    else if ( params[0].equals("SPN")){
-                        params[0] = "WPN";
-                    }
-                    String query = "select location from vw_storage where plant = '"+params[0]+"' " ;
+
+
+
+                    String query = "select location from vw_storage where  "+params[0]+" " ;
                     PreparedStatement ts = con.prepareStatement(query);
                     ResultSet bs = ts.executeQuery();
                     locHelp.StorageList.clear();
@@ -220,13 +206,12 @@ public class Login extends AppCompatActivity {
                         locHelp.StorageList.add(bs.getString("location"));
                     }
 
-                    String squery = "select storage from vw_storage where plant = '"+params[0]+"' group by storage" ;
+                    String squery = "select storage from vw_storage where "+params[0]+" group by storage" ;
                     PreparedStatement sts = con.prepareStatement(squery);
                     ResultSet sbs = sts.executeQuery();
                     locHelp.storages.clear();
                     while (sbs.next()) {
                         locHelp.storages.add(sbs.getString("storage"));
-
                     }
 
                   /*  String equery = "SELECT section\n" +
@@ -241,7 +226,7 @@ public class Login extends AppCompatActivity {
                             "when right(section,1) ='L' then left(section,1)+' ซ้าย' \n" +
                             "when right(section,1) ='C' then left(section,1)+' กลาง' \n" +
                             "else section  end section_d,storage \n" +
-                            "FROM vw_storage where plant = '"+params[0]+"' \n" +
+                            "FROM vw_storage where  "+params[0]+" \n" +
                             "group by section,storage ";
 
                     PreparedStatement ets = con.prepareStatement(equery);
@@ -264,11 +249,6 @@ public class Login extends AppCompatActivity {
 //                        locHelp.mapStorage.put(ebs.getString("storage"),ebs.getString("section");
 //                        i++;
                     }
-
-
-
-
-
                 }
             } catch (Exception ex) {
 
@@ -293,11 +273,11 @@ public class Login extends AppCompatActivity {
         protected void onPostExecute(String r) {
 
             LocationBin lb = new LocationBin();
-            lb.execute(plant);
+            lb.execute(branch);
 
             pbbar.setVisibility(View.GONE);
             if (gPass.equals(id)){
-                usrHelper.createSession(username,id,plant,level);
+                usrHelper.createSession(username,id,plant,level,branch,unlock);
 //                Intent i = new Intent(Login.this, StockMmt.class); //ย้ายเสา
                 Intent i = new Intent(Login.this, Hub.class);
                 startActivity(i);
@@ -333,9 +313,12 @@ public class Login extends AppCompatActivity {
                     //Log.d("IDTEST",query);
                     while (bs.next()) {
 
-                        username = bs.getString("name");                        id = bs.getString("Id");
+                        username = bs.getString("name");
+                        id = bs.getString("Id");
                         plant = bs.getString("plant");
                         level = bs.getString("lv");
+                        branch = bs.getString("branch");
+                        unlock = bs.getString("unlock");
 
                     }
                     isSuccess = true;
@@ -369,7 +352,18 @@ public class Login extends AppCompatActivity {
         builder.show();
     }
 
+    public void langSwap(View view){
 
+       if(usrHelper.getLang() == 1){
+           usrHelper.setLang(0);
+           lang.setMap(0);
 
+       }else{
+           usrHelper.setLang(1);
+           lang.setMap(1);
+       }
+        btn_lang.setText(lang.map.get("lang"));
 
+//        Log.d("langSwap", "langSwap: "+usrHelper.getLang());
+    }
 }
